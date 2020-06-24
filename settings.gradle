@@ -1,0 +1,3 @@
+//include ':module_native_c'
+//include ':module_native_rust'
+include ':app'
