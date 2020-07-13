@@ -19,6 +19,6 @@ public class FilecoinBlsSignUtil {
 //    public static native String filPrivateKeySign(byte[] privateKey, String message);
 
     static {
-        System.loadLibrary("bls_signatures_rs");
+        System.loadLibrary("fil_bls_sign_rs");
     }
 }

@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import com.lxx.nativerust.FilecoinBlsSignUtil;
 
+import org.bouncycastle.util.encoders.Hex;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,28 +26,28 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        String seed = "4c279adb09ad7bad4f9f83b52c9faf373c7d19dc6b9d8d02075463d181ea9f05";
         String privateKeySeed = FilecoinBlsSignUtil.generateBlsSeed();
+        System.out.println("PrivateKeySeed：" + privateKeySeed);
 
-//        String ons = new String(Hex.decode("4b9d122b1b277ade492dff84f4f4ea3c928a7fe47bb59cb421d501f298ca4e2c"));
 
-        String publicKey = FilecoinBlsSignUtil.filPrivateKeyPublicKey("b12d151a8de9ec75e8b863f67075687feb05186a3d8571159963bae177e8aa0d");
-        String privateKey = FilecoinBlsSignUtil.filPrivateKeyGenerateWithSeed("4c279adb09ad7bad4f9f83b52c9faf373c7d19dc6b9d8d02075463d181ea9f05");
-        System.out.println(publicKey);
-        System.out.println(privateKey);
+        String privateKey = FilecoinBlsSignUtil.filPrivateKeyGenerateWithSeed(privateKeySeed);
+        System.out.println("PrivateKey：" + privateKey);
+        System.out.println("PrivateKeyError：" + FilecoinBlsSignUtil.filPrivateKeyGenerateWithSeed("这是一个错误"));
 
-//        String message = "hello foo";
-        String message = "0171a0e40220dbcb39aa11eca8f35eee1b28228baf5dc1fe458c1a02e579bf7f259182e7d17f";
-//        String message = "0171a0e4022023e5214bbc9befe3b2ff91cb3baef6078e420bca07393fe2a2164f39f87139f6";
 
-        String sign = FilecoinBlsSignUtil.filPrivateKeySign(privateKey, message);
-//        String sign = FilecoinBlsSignUtil.filPrivateKeySign(Hex.decode(privateKey), message);
-//        List<Byte> sign = FilecoinBlsSignUtil.filPrivateKeySign(privateKey, message);
+        String publicKey = FilecoinBlsSignUtil.filPrivateKeyPublicKey(privateKey);
+        System.out.println("RightPublicKey：" + publicKey);
+        System.out.println("ErrorPublicKey1：" + FilecoinBlsSignUtil.filPrivateKeyPublicKey("4adf1d40754a8c0e80e46b0ec0c2aaa65f9c9e61a2dfe8b37d9192bdc6ec8c8b"));
+        System.out.println("ErrorPublicKey2：" + FilecoinBlsSignUtil.filPrivateKeyPublicKey("这是一个错误"));
 
-//        a2846bb9aa4e99199ce297aac4c9f30025d74e8bd74dab01ae775fea89e39b74cc7325b3c824f52672e9cff0a6ab2a1f028259b5af066980ee4705010586d71ffd278c63d1fb9a47000fb62e76fb13466fa8305bcf4453f7c2ccd6782f0d9f10
-//        a2846bb9aa4e99199ce297aac4c9f30025d74e8bd74dab01ae775fea89e39b74cc7325b3c824f52672e9cff0a6ab2a1f028259b5af066980ee4705010586d71ffd278c63d1fb9a47000fb62e76fb13466fa8305bcf4453f7c2ccd6782f0d9f10
 
-        System.out.println("sign：" + sign);
+        String message = "这个一个测试案例";
+        String messageHex = Hex.toHexString(message.getBytes());
+        String sign = FilecoinBlsSignUtil.filPrivateKeySign(privateKey, messageHex);
+        System.out.println("SignMessage：" + sign);
+        System.out.println("SignMessageError1：" + FilecoinBlsSignUtil.filPrivateKeySign(privateKey, "消息错误"));
+        System.out.println("SignMessageError2：" + FilecoinBlsSignUtil.filPrivateKeySign("签名错误", messageHex));
+        System.out.println("SignMessageError3：" + FilecoinBlsSignUtil.filPrivateKeySign("签名错误", "消息错误"));
 
     }
 }
